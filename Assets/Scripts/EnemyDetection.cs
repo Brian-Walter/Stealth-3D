@@ -11,10 +11,12 @@ public class EnemyDetection : MonoBehaviour
     public float rotationSpeed = 5f;
     public float investigateTime = 3f;
 
-    // Estados legíveis por outros scripts
     public bool IsAlert => isAlert && !isInvestigating;
     public bool IsInvestigating => isInvestigating;
-    public bool IsPatrolling => !isAlert && !isInvestigating;
+    public bool IsPatrolling => !isAlert && !isInvestigating
+                                && enemyPatrol != null
+                                && enemyPatrol.IsMoving
+                                && enemyPatrol.enabled;
 
     [SerializeField] private bool isAlert = false;
 

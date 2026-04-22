@@ -1,6 +1,4 @@
 using UnityEngine;
-// Descomente a linha abaixo quando for integrar o NavMesh
-// using UnityEngine.AI;
 
 public class EnemyPatrol : MonoBehaviour
 {
@@ -13,15 +11,7 @@ public class EnemyPatrol : MonoBehaviour
     private float waitCounter = 0f;
     private bool isWaiting = false;
 
-    // Descomente quando for usar NavMeshAgent:
-    // private NavMeshAgent agent;
-
-    void Start()
-    {
-        // Descomente quando for usar NavMeshAgent:
-        // agent = GetComponent<NavMeshAgent>();
-        // agent.speed = speed;
-    }
+    public bool IsMoving => !isWaiting && waypoints.Length > 0;
 
     void Update()
     {
@@ -45,7 +35,6 @@ public class EnemyPatrol : MonoBehaviour
     {
         Transform target = waypoints[currentWaypoint];
 
-        // --- Versão para cena de testes (sem NavMesh) ---
         transform.position = Vector3.MoveTowards(
             transform.position,
             target.position,
@@ -58,11 +47,6 @@ public class EnemyPatrol : MonoBehaviour
             transform.rotation = Quaternion.LookRotation(direction);
         }
 
-        // --- Versão com NavMeshAgent (para o projeto final) ---
-        // agent.SetDestination(target.position);
-        // if (agent.remainingDistance <= agent.stoppingDistance) { ... }
-
-        // Chegou no waypoint
         if (Vector3.Distance(transform.position, target.position) < 0.1f)
         {
             isWaiting = true;
@@ -75,7 +59,6 @@ public class EnemyPatrol : MonoBehaviour
         currentWaypoint = (currentWaypoint + 1) % waypoints.Length;
     }
 
-    // Desenha os waypoints no Editor para facilitar o posicionamento
     void OnDrawGizmos()
     {
         if (waypoints == null || waypoints.Length == 0) return;

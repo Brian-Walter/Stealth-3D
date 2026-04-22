@@ -2,26 +2,28 @@ using UnityEngine;
 
 public class EnemyAnimationController : MonoBehaviour
 {
-    public Animator animator;
-    public EnemyPatrol patrol;
+    private Animator animator;
     public EnemyDetection detection;
+
+    void Awake()
+    {
+        animator = GetComponent<Animator>();
+    }
+
+    void Start()
+    {
+        if (animator == null)
+        {
+            Debug.LogError("Animator não encontrado no objeto!");
+            return;
+        }
+    }
 
     void Update()
     {
-        if (animator == null) return;
+        if (animator == null || detection == null) return;
 
-        bool isWalking = false;
-
-        if (patrol != null && patrol.enabled)
-        {
-            isWalking = true;
-        }
-
-        if (detection != null && detection.IsAlert)
-        {
-            isWalking = false;
-        }
-
-        animator.SetBool("isWalking", isWalking);
+        animator.SetBool("isWalking", detection.IsPatrolling);
+        animator.SetBool("isAlert", detection.IsAlert || detection.IsInvestigating);
     }
 }
