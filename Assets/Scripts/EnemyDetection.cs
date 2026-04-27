@@ -11,6 +11,9 @@ public class EnemyDetection : MonoBehaviour
     public float rotationSpeed = 5f;
     public float investigateTime = 3f;
 
+    [Header("Game Over")]
+    public bool gameOverOnDetection = true;
+
     public bool IsAlert => isAlert && !isInvestigating;
     public bool IsInvestigating => isInvestigating;
     public bool IsPatrolling => !isAlert && !isInvestigating
@@ -25,6 +28,8 @@ public class EnemyDetection : MonoBehaviour
     private bool isInvestigating = false;
     private Vector3 lastKnownPosition;
 
+    private bool gameOverTriggered = false;
+
     void Update()
     {
         if (enemyVision == null) return;
@@ -35,6 +40,12 @@ public class EnemyDetection : MonoBehaviour
             isInvestigating = false;
             investigateCounter = 0f;
             EnterAlertState();
+
+            if (gameOverOnDetection && !gameOverTriggered)
+            {
+                gameOverTriggered = true;
+                GameOverLoader.CarregarGameOver(this, 1.5f);
+            }
         }
         else if (isAlert)
         {
@@ -92,6 +103,7 @@ public class EnemyDetection : MonoBehaviour
         if (lookDirection != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+
             transform.rotation = Quaternion.Slerp(
                 transform.rotation,
                 targetRotation,
