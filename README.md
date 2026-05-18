@@ -4,7 +4,7 @@ A Unity project focused on NPC behavior systems, including perception, decision-
 
 ## Demo
 
-(Add a GIF here showing NPC detecting the player)
+![Demo](Documentação/demo.gif)
 
 ## Overview
 
